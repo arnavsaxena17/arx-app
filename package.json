@@ -1,0 +1,97 @@
+{
+  "name": "arxena",
+  "version": "1.0.0",
+  "description": "A tool to manage Arxena Chrome extensions",
+  "main": "dist/main/main.js",
+  "homepage": "https://arxena.com",
+  "author": {
+    "name": "Arxena", 
+    "email": "contact@arxena.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "app:dir": "electron-builder --dir",
+    "app:dist": "electron-builder",
+    "build:renderer": "webpack --mode production",
+    "build:main": "tsc -p tsconfig.main.json",
+    "build": "yarn build:main && yarn build:renderer",
+    "watch:renderer": "webpack --watch",
+    "watch:main": "tsc -p tsconfig.main.json --watch",
+    "dev": "concurrently \"yarn watch:renderer\" \"yarn watch:main\" \"yarn wait-and-start\"",
+    "wait-and-start": "wait-on dist/renderer/index.html && electron .",
+    "package:all": "yarn build && electron-builder build --mac --win --linux --x64 --arm64 --publish never",
+    "package:win": "yarn build && electron-builder build --win --x64 --publish never",
+    "package:linux": "yarn build && electron-builder build --linux --x64 --publish never",
+    "package:mac-universal": "yarn build && electron-builder build --mac --x64 --arm64 --publish never"
+  },
+  "build": {
+    "appId": "com.arxena.app",
+    "productName": "Arxena",
+    "files": [
+      "dist/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "build"
+    },
+    "publish": {
+      "provider": "generic",
+      "url": "https://api.bitbucket.org/2.0/repositories/arxena/arx-app/downloads",
+      "channel": "latest"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "public/assets/icons/app.icns"
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "public/assets/icons/android-launchericon-512-512.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "maintainer": "Arxena <contact@arxena.com>",
+      "category": "Utility",
+      "icon": "public/assets/icons/android-launchericon-512-512.png"
+    }
+  },
+  "devDependencies": {
+    "@electron/packager": "^18.3.6",
+    "@types/adm-zip": "^0.5.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^18.17.1",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "concurrently": "^9.1.2",
+    "copy-webpack-plugin": "^13.0.0",
+    "css-loader": "^7.1.2",
+    "electron": "^27.1.0",
+    "electron-builder": "^24.6.4",
+    "electron-packager": "^17.1.2",
+    "electron-rebuild": "^3.2.9",
+    "fs-extra": "^11.3.0",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.2",
+    "typescript": "^5.0.4",
+    "wait-on": "^8.0.3",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.1"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "adm-zip": "^0.5.10",
+    "axios": "^1.6.0",
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.1.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
